@@ -27,6 +27,6 @@ def testFacebookPageData(page_id, access_token):
     response = urllib2.urlopen(request)
     data = json.loads(response.read())
 
-    print json.dumps(data, indent=4, sort_Keys=True)
+    print json.dumps(data, indent=4, sort_keys=True)
 
 testFacebookPageData(page_id, access_token)
