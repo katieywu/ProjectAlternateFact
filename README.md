@@ -1,2 +1,2 @@
-# ProjectHappiness
+# ProjectAlternateFact
 Senior Design Project
