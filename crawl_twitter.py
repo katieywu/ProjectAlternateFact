@@ -1,5 +1,6 @@
 import time
-import datetime
+# import datetime
+import AppAuthHandler
 import tweepy
 
 # The consumer keys can be found on your application's Details
@@ -7,19 +8,24 @@ import tweepy
 consumer_key = "EEokGGuHWjTlmDDptF4rvUaOZ"
 consumer_secret = "Illo1cVRLsmGiX9XyJe8Q5EQNvtaAIzmgEhWGuFAPmjgUhcaWd"
 
-# The access tokens can be found on your applications's Details
-# page located at https://dev.twitter.com/apps (located
-# under "Your access token")
+# ------------User Based Authentication----------------- #
 access_token = "2716892042-ak58Dv8xvos1W27rqhQ46BhibT5KDyFe3zXIPxs"
 access_token_secret = "E7gCBMNFhGizpbXqO5h7tOQQuzCaXgnebaDeV8AJxr2ac"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
-api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+# api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+
+# ------------Application only authentication------------ #
+app_only_auth = AppAuthHandler(consumer_key, consumer_secret)
+api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 
+#
 def get_all_followers(account_name):
+    """Get all the followers of a given Twitter account and print it out"""
+
     # ids = []
     #
     # for page in tweepy.Cursor(api.followers_ids, screen_name="nytimes").pages():
@@ -42,9 +48,6 @@ def get_all_followers(account_name):
 
         count += 1
         print str(count) + ". @" + str(user)
-    # for user in tweepy.Cursor(api.followers_ids).items():
-    #     # process status here
-    #     process_status(status)
 
 
 def test_rate():
