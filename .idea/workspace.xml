@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e1072996-e7ba-42d1-a1cc-2bcb504f1853" name="Default" comment="fixed app auth handler thing">
+    <list default="true" id="e1072996-e7ba-42d1-a1cc-2bcb504f1853" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/crawl_twitter.py" afterPath="$PROJECT_DIR$/crawl_twitter.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -368,7 +367,14 @@
       <option name="project" value="LOCAL" />
       <updated>1486752431054</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fixed app auth handler thing">
+      <created>1487184542961</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1487184542961</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -402,7 +408,8 @@
     <MESSAGE value="added modularity for post crawling" />
     <MESSAGE value="fixed the rate limit thing, now uses user ids instead, need to implement lookup" />
     <MESSAGE value="added auth handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="added auth handler" />
+    <MESSAGE value="fixed app auth handler thing" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed app auth handler thing" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
