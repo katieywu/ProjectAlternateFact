@@ -1,6 +1,5 @@
 import time
 # import datetime
-import AppAuthHandler
 import tweepy
 
 # The consumer keys can be found on your application's Details
@@ -18,7 +17,7 @@ auth.set_access_token(access_token, access_token_secret)
 # api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 # ------------Application only authentication------------ #
-app_only_auth = AppAuthHandler(consumer_key, consumer_secret)
+app_only_auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
 api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 
