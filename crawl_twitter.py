@@ -14,11 +14,11 @@ access_token_secret = "E7gCBMNFhGizpbXqO5h7tOQQuzCaXgnebaDeV8AJxr2ac"
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 
-# api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 # ------------Application only authentication------------ #
-app_only_auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
-api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
+# app_only_auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+# api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 
 #
@@ -32,6 +32,11 @@ def get_all_followers(account_name):
     #     time.sleep(60)
     # print len(ids)
 
+    ids = []
+    filename = account_name + "_followers.txt"
+    myfile = open(filename, "w+")
+    myfile.write("Source,Target,Type\n")
+
     followers = tweepy.Cursor(api.followers_ids, screen_name=account_name, count=5000).items()
 
     count = 0
@@ -43,10 +48,17 @@ def get_all_followers(account_name):
             # time.sleep(60 * 15)
             # user = next(followers)
         except StopIteration:
+            print str(count) + " followers of " + str(account_name)
+            myfile.close()
             break
-
         count += 1
-        print str(count) + ". @" + str(user)
+        ids.append(user)
+        # if count % 100 == 0:
+        #     for p in api.lookup_users(user_ids=ids):
+        #         print p.screen_name
+        #     ids[:] = []
+        myfile.write(str(user) + "," + str(account_name) + ",directed\n")
+
 
 
 def test_rate():
