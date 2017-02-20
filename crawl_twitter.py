@@ -22,43 +22,37 @@ api = tweepy.API(auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 
 #
-def get_all_followers(account_name):
+def get_all_followers(file_name):
     """Get all the followers of a given Twitter account and print it out"""
+    seeds = [line.rstrip('\n') for line in open(file_name, "r")]
 
-    # ids = []
-    #
-    # for page in tweepy.Cursor(api.followers_ids, screen_name="nytimes").pages():
-    #     ids.extend(page)
-    #     time.sleep(60)
-    # print len(ids)
+    for account_name in seeds:
+        ids = []
+        filename = account_name + "_followers.txt"
+        myfile = open(filename, "w+")
+        myfile.write("Source,Target,Type\n")
 
-    ids = []
-    filename = account_name + "_followers.txt"
-    myfile = open(filename, "w+")
-    myfile.write("Source,Target,Type\n")
+        followers = tweepy.Cursor(api.followers_ids, screen_name=account_name, count=5000).items()
 
-    followers = tweepy.Cursor(api.followers_ids, screen_name=account_name, count=5000).items()
-
-    count = 0
-    while True:
-        try:
-            user = next(followers)
-        except tweepy.TweepError as t:
-            print t.message[0]
-            # time.sleep(60 * 15)
-            # user = next(followers)
-        except StopIteration:
-            print str(count) + " followers of " + str(account_name)
-            myfile.close()
-            break
-        count += 1
-        ids.append(user)
-        # if count % 100 == 0:
-        #     for p in api.lookup_users(user_ids=ids):
-        #         print p.screen_name
-        #     ids[:] = []
-        myfile.write(str(user) + "," + str(account_name) + ",directed\n")
-
+        count = 0
+        while True:
+            try:
+                user = next(followers)
+            except tweepy.TweepError as t:
+                print t.message[0]
+                # time.sleep(60 * 15)
+                # user = next(followers)
+            except StopIteration:
+                print str(count) + " followers of " + str(account_name)
+                myfile.close()
+                break
+            count += 1
+            ids.append(user)
+            # if count % 100 == 0:
+            #     for p in api.lookup_users(user_ids=ids):
+            #         print p.screen_name
+            #     ids[:] = []
+            myfile.write(str(user) + "," + str(account_name) + ",directed\n")
 
 
 def test_rate():
@@ -87,5 +81,4 @@ def test_rate():
         time.sleep(30)
 
 
-# test_rate()
-get_all_followers("meganspecia")
+get_all_followers("seeds.txt")
