@@ -79,6 +79,8 @@ def get_all_followersjson(file_name):
     # print nodes
 
     # print start_count
+    doublecount = 0;
+    double_file = open("../data/doublecount_RedState.txt", "w+")
 
     for user_id in seeds:
 
@@ -97,7 +99,9 @@ def get_all_followersjson(file_name):
             count += 1
             # print user
             if str(user) in mapping:
-                print "found user: " + str(user) + " mapping: " + str(mapping[str(user)])
+                doublecount += 1
+                double_file.write(str(user) + "\n")
+                # print "found user: " + str(user) + " mapping: " + str(mapping[str(user)])
                 links.append({"source": mapping[str(user)], "target": target, "value": 1})
             else:
                 nodes.append({"name": str(user), "group": 1})
@@ -106,7 +110,9 @@ def get_all_followersjson(file_name):
                 map_count += 1
     jsonwrapper["nodes"] = nodes
     jsonwrapper["links"] = links
-    with open('dataLarger.txt', 'w') as outfile:
+    print "final doublecount: " + str(doublecount)
+    double_file.close()
+    with open('../data/dataRedState.txt', 'w') as outfile:
         json.dump(jsonwrapper, outfile)
 
 
@@ -136,4 +142,4 @@ def test_rate():
         time.sleep(30)
 
 
-get_all_followersjson("seedsTest.txt")
+get_all_followersjson("seeds.txt")
