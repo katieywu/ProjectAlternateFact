@@ -75,10 +75,9 @@ def get_all_followersjson(file_name):
         nodes.append({"name": account_name, "group": 2})
         map_count += 1
 
-    print mapping
-    print nodes
+    # print mapping
+    # print nodes
 
-    start_count = len(mapping)
     # print start_count
 
     for user_id in seeds:
@@ -102,12 +101,12 @@ def get_all_followersjson(file_name):
                 links.append({"source": mapping[str(user)], "target": target, "value": 1})
             else:
                 nodes.append({"name": str(user), "group": 1})
-                links.append({"source": start_count, "target": target, "value": 1})
-                mapping[str(user)] = start_count
-                start_count += 1
+                links.append({"source": map_count, "target": target, "value": 1})
+                mapping[str(user)] = map_count
+                map_count += 1
     jsonwrapper["nodes"] = nodes
     jsonwrapper["links"] = links
-    with open('data.txt', 'w') as outfile:
+    with open('dataLarger.txt', 'w') as outfile:
         json.dump(jsonwrapper, outfile)
 
 

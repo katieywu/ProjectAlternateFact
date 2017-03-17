@@ -1,3 +1,2 @@
-RedState
-infowars
-BreitbartNews
+RedState 3135241
+infowars 14505245

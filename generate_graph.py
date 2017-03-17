@@ -9,12 +9,13 @@ data = []
 # opener = urllib2.build_opener()
 # f = opener.open(req)
 # data = json.loads(f.read())
-with open("data.txt") as json_file:
+with open("dataLarger.txt") as json_file:
     data = json.load(json_file)
 
 N=len(data['nodes'])
 
 L=len(data['links'])
+print L
 Edges=[(data['links'][k]['source'], data['links'][k]['target']) for k in range(L)]
 
 G=ig.Graph(Edges, directed=True)
@@ -27,8 +28,6 @@ for node in data['nodes']:
     group.append(node['group'])
 
 layt=G.layout('kk', dim=3)
-
-print layt
 
 Xn=[layt[k][0] for k in range(N)]# x-coordinates of nodes
 Yn=[layt[k][1] for k in range(N)]# y-coordinates
@@ -73,7 +72,7 @@ axis=dict(showbackground=False,
           )
 
 layout = Layout(
-         title="Network of coappearances of characters in Victor Hugo's novel<br> Les Miserables (3D visualization)",
+         title="3D Twitter Follower Visualization",
          width=1000,
          height=1000,
          showlegend=False,
@@ -85,24 +84,10 @@ layout = Layout(
      margin=Margin(
         t=100
     ),
-    hovermode='closest',
-    annotations=Annotations([
-           Annotation(
-           showarrow=False,
-            text="Data source: <a href='http://bost.ocks.org/mike/miserables/miserables.json'>[1]</a>",
-            xref='paper',
-            yref='paper',
-            x=0,
-            y=0.1,
-            xanchor='left',
-            yanchor='bottom',
-            font=Font(
-            size=14
-            )
-            )
-        ]),    )
+    hovermode='closest'
+)
 
 data=Data([trace1, trace2])
 fig=Figure(data=data, layout=layout)
 # ig.plot(G)
-py.iplot(fig, filename='Les-Miserables')
+py.iplot(fig, filename='TestSmall')
