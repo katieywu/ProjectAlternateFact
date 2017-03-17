@@ -17,8 +17,8 @@ N=len(data['nodes'])
 L=len(data['links'])
 Edges=[(data['links'][k]['source'], data['links'][k]['target']) for k in range(L)]
 
-# G=ig.Graph(Edges, directed=False)
-G = ig.Graph.Read_Ncol('../data/testpaolatiff_followers.txt', directed=True)
+G=ig.Graph(Edges, directed=True)
+# G = ig.Graph.Read_Ncol('../data/testpaolatiff_followers.txt', directed=True)
 
 labels=[]
 group=[]
@@ -104,5 +104,5 @@ layout = Layout(
 
 data=Data([trace1, trace2])
 fig=Figure(data=data, layout=layout)
-
+# ig.plot(G)
 py.iplot(fig, filename='Les-Miserables')

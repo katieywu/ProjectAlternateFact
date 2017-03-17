@@ -2,11 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e1072996-e7ba-42d1-a1cc-2bcb504f1853" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/generate_graph.py" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/testiGraph.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/crawl_twitter.py" afterPath="$PROJECT_DIR$/crawl_twitter.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/seeds.txt" afterPath="$PROJECT_DIR$/seeds.txt" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/generate_graph.py" afterPath="$PROJECT_DIR$/generate_graph.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -21,11 +19,11 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="crawl_twitter.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="crawl_twitter.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/crawl_twitter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1230">
-              <caret line="91" column="38" lean-forward="true" selection-start-line="91" selection-start-column="38" selection-end-line="91" selection-end-column="38" />
+            <state relative-caret-position="241">
+              <caret line="106" column="32" lean-forward="true" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -33,11 +31,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="generate_graph.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="generate_graph.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/generate_graph.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-45">
-              <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+            <state relative-caret-position="150">
+              <caret line="17" column="42" lean-forward="false" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -58,14 +56,19 @@
       <file leaf-file-name="testiGraph.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/testiGraph.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="240">
-              <caret line="16" column="74" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+            <state relative-caret-position="286">
+              <caret line="44" column="12" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="17" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>100103011</find>
+    </findStrings>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -79,8 +82,8 @@
         <option value="$PROJECT_DIR$/AppAuthHandler.py" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/testiGraph.py" />
-        <option value="$PROJECT_DIR$/crawl_twitter.py" />
         <option value="$PROJECT_DIR$/generate_graph.py" />
+        <option value="$PROJECT_DIR$/crawl_twitter.py" />
       </list>
     </option>
   </component>
@@ -419,12 +422,19 @@
       <option name="project" value="LOCAL" />
       <updated>1487184542961</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added a ton of shit including json and igraph">
+      <created>1489718719133</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1489718719133</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="23" width="1280" height="694" extended-state="6" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.19221604" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -435,7 +445,7 @@
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3986711" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -454,7 +464,8 @@
     <MESSAGE value="fixed the rate limit thing, now uses user ids instead, need to implement lookup" />
     <MESSAGE value="added auth handler" />
     <MESSAGE value="fixed app auth handler thing" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed app auth handler thing" />
+    <MESSAGE value="added a ton of shit including json and igraph" />
+    <option name="LAST_COMMIT_MESSAGE" value="added a ton of shit including json and igraph" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -705,8 +716,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/testiGraph.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="16" column="74" lean-forward="false" selection-start-line="16" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+        <state relative-caret-position="286">
+          <caret line="44" column="12" lean-forward="true" selection-start-line="44" selection-start-column="0" selection-end-line="44" selection-end-column="17" />
           <folding />
         </state>
       </provider>
@@ -719,22 +730,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/crawl_twitter.py">
+    <entry file="file://$PROJECT_DIR$/generate_graph.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1230">
-          <caret line="91" column="38" lean-forward="true" selection-start-line="91" selection-start-column="38" selection-end-line="91" selection-end-column="38" />
+        <state relative-caret-position="150">
+          <caret line="17" column="42" lean-forward="false" selection-start-line="17" selection-start-column="42" selection-end-line="17" selection-end-column="42" />
           <folding>
-            <element signature="e#0#11#0" expanded="true" />
+            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/generate_graph.py">
+    <entry file="file://$PROJECT_DIR$/crawl_twitter.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-45">
-          <caret line="21" column="0" lean-forward="true" selection-start-line="21" selection-start-column="0" selection-end-line="21" selection-end-column="0" />
+        <state relative-caret-position="241">
+          <caret line="106" column="32" lean-forward="true" selection-start-line="106" selection-start-column="32" selection-end-line="106" selection-end-column="32" />
           <folding>
-            <element signature="e#0#19#0" expanded="true" />
+            <element signature="e#0#11#0" expanded="true" />
           </folding>
         </state>
       </provider>

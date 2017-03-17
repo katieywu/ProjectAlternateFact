@@ -72,19 +72,19 @@ def get_all_followersjson(file_name):
     map_count = 0
     for account_name in seeds:
         mapping[account_name] = map_count
-        nodes.append({"name": account_name, "group": 1})
+        nodes.append({"name": account_name, "group": 2})
         map_count += 1
 
     print mapping
     print nodes
 
-    start_count = len(mapping) + 1
-    print start_count
+    start_count = len(mapping)
+    # print start_count
 
     for user_id in seeds:
 
         followers = tweepy.Cursor(api.followers_ids, user_id=user_id, count=5000).items()
-        target = mapping[account_name]
+        target = mapping[user_id]
 
         count = 0
         while True:
@@ -96,12 +96,15 @@ def get_all_followersjson(file_name):
                 print str(count) + " followers of " + str(account_name)
                 break
             count += 1
-            if user in mapping:
-                links.append({"source": mapping[user], "target": target, "value": 1})
+            # print user
+            if str(user) in mapping:
+                print "found user: " + str(user) + " mapping: " + str(mapping[str(user)])
+                links.append({"source": mapping[str(user)], "target": target, "value": 1})
             else:
                 nodes.append({"name": str(user), "group": 1})
                 links.append({"source": start_count, "target": target, "value": 1})
-            start_count += 1
+                mapping[str(user)] = start_count
+                start_count += 1
     jsonwrapper["nodes"] = nodes
     jsonwrapper["links"] = links
     with open('data.txt', 'w') as outfile:
