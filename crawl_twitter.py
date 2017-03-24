@@ -5,8 +5,8 @@ import tweepy
 
 # The consumer keys can be found on your application's Details
 # page located at https://dev.twitter.com/apps (under "OAuth settings")
-consumer_key = "OXapCsjloA1z6CFeXTl0f7Ecg"
-consumer_secret = "CVOJW41p6Q0vTLY1xxHoNXJDlpafk5qqpQBzm2lIpc5DrnEhl3"
+consumer_key = "vw8VMxmNL6JQ6IIafCQvHonvi"
+consumer_secret = "6tjtJxomUimSL5s4gFOADGPiX0FVfn7Yn5IgMfkLuIEoOxLyJl"
 
 # ------------User Based Authentication----------------- #
 # access_token = "2716892042-ak58Dv8xvos1W27rqhQ46BhibT5KDyFe3zXIPxs"
@@ -25,18 +25,22 @@ api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_noti
 #
 def get_all_followers(file_name):
     """Get all the followers of a given Twitter account and print it out"""
-    seeds = [line.rstrip('\n') for line in open(file_name, "r")]
+    # seeds = [line.rstrip('\n').split(' ', 1)[1] for line in open(file_name, "r")]
 
-    filename = "../data/" + "testlarge" + "_followers.txt"
-    myfile = open(filename, "w+")
+    # filename = "../data/" + "testlarge" + "_followers.txt"
+    # myfile = open(filename, "w+")
+    mapping = {}
+    for line in open(file_name, "r"):
+        split = line.rstrip('\n').split(' ', 1)
+        mapping[split[1]] = split[0]
 
-    for account_name in seeds:
+    for user_id, account_name in mapping.iteritems():
         # ids = []
-        # filename = "../data/" + account_name + "_followers.txt"
-        # myfile = open(filename, "w+")
+        filename = "../data/" + account_name + "_followers.txt"
+        myfile = open(filename, "w+")
         # myfile.write("Source,Target,Type\n")
 
-        followers = tweepy.Cursor(api.followers_ids, screen_name=account_name, count=5000).items()
+        followers = tweepy.Cursor(api.followers_ids, user_id=user_id, count=5000).items()
 
         count = 0
         while True:
@@ -48,7 +52,7 @@ def get_all_followers(file_name):
                 # user = next(followers)
             except StopIteration:
                 print str(count) + " followers of " + str(account_name)
-                # myfile.close()
+                myfile.close()
                 break
             count += 1
             # ids.append(user)
@@ -56,8 +60,8 @@ def get_all_followers(file_name):
             #     for p in api.lookup_users(user_ids=ids):
             #         print p.screen_name
             #     ids[:] = []
-            myfile.write(str(user) + " " + str(account_name) + "\n")
-    myfile.close()
+            myfile.write(str(user) + "\n")
+    # myfile.close()
 
 
 def get_all_followersjson(file_name):
@@ -142,4 +146,4 @@ def test_rate():
         time.sleep(30)
 
 
-get_all_followersjson("seeds.txt")
+get_all_followers("seeds.txt")
