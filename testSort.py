@@ -19,14 +19,23 @@ for key, group in groupby(a, lambda pair: pair[0]):
     d = set()
     for elem in group:
         d.add(elem[1])
-    out.append((key, d))
+    out.append((key, frozenset(d)))
 print out
 
-for key, group in groupby(out, lambda pair: pair[1]):
-    print key
-    print group
-# out = [(key, + dict(elem for _, elem in group) for key, group in groupby(a, lambda pair: pair[0]))]
-# out = [(key, + dict(elem for _, elem in group) for key, group in groupby(a, lambda pair: pair[0]) for elem in group)]
+# for key, group in groupby(out, lambda pair: pair[1]):
+#     print key
+#     for elem in group:
+#         print elem
 
+dic = {}
+for tup in out:
+    key = tup[1]
+    val = tup[0]
+    if key in dic:
+        dic[key] += 1
+    else:
+        dic[key] = 1
+
+print dic
 # out = [(key,) + tuple(elem for _, elem in group) for key, group in groupby(a, lambda pair: pair[0])]
 
