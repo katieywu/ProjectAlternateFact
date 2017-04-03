@@ -37,7 +37,7 @@ def get_all_followers(file_name):
     for user_id, account_name in mapping.iteritems():
         # ids = []
         filename = "../data/" + account_name + "_followers.txt"
-        myfile = open(filename, "w+")
+        myfile = open(filename, "a+")
         # myfile.write("Source,Target,Type\n")
 
         followers = tweepy.Cursor(api.followers_ids, user_id=user_id, count=5000).items()
