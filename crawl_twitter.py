@@ -35,10 +35,8 @@ def get_all_followers(file_name):
         mapping[split[1]] = split[0]
 
     for user_id, account_name in mapping.iteritems():
-        # ids = []
         filename = "../data/" + account_name + "_followers.txt"
-        myfile = open(filename, "a+")
-        # myfile.write("Source,Target,Type\n")
+        # myfile = open(filename, "a+")
 
         followers = tweepy.Cursor(api.followers_ids, user_id=user_id, count=5000).items()
 
@@ -48,20 +46,13 @@ def get_all_followers(file_name):
                 user = next(followers)
             except tweepy.TweepError as t:
                 print t.message
-                # time.sleep(60 * 15)
-                # user = next(followers)
             except StopIteration:
                 print str(count) + " followers of " + str(account_name)
-                myfile.close()
+                # myfile.close()
                 break
             count += 1
-            # ids.append(user)
-            # if count % 100 == 0:
-            #     for p in api.lookup_users(user_ids=ids):
-            #         print p.screen_name
-            #     ids[:] = []
-            myfile.write(str(user) + "\n")
-    # myfile.close()
+            with open(filename, "a+") as myfile:
+                myfile.write(str(user) + "\n")
 
 
 def get_all_followersjson(file_name):

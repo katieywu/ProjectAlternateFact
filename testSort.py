@@ -1,5 +1,4 @@
-from itertools import groupby
-
+from sys import getsizeof
 # with open('../data/doublecount_RedState.txt', 'r') as f:
 #     lines = f.readlines()
 # numbers = [int(e.strip()) for e in lines]
@@ -10,9 +9,16 @@ from itertools import groupby
 # print numbers
 
 a = [(1, "a"), (2, "a"), (2, "b"), (3, "a"), (3, "b"), (1, "c"), (5, "a")]
-# for key, group in groupby(a, lambda pair: pair[0]):
-#     print str(key) + ", " + str(group)
-# print [(key, {value}) for key, group in groupby(a, lambda pair: pair[0]) for value in group]
+starting_list = []
+
+# for i in range(3):
+#     filename = "../data/dataset" + i + ".txt"
+#     with open(filename, "r") as infile:
+#         for line in infile:
+#             do_something_with(line)
+with open("../data/dataset2.txt", "r") as infile:
+    for line in infile:
+        print(line.rstrip('\n'))
 
 
 def full_group_by(l):

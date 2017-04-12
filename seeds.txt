@@ -24,3 +24,5 @@ TheDailyCaller 39308549 22
 BreitbartNews 457984599 23
 DailyKos 20818801 24
 CounterPunch 297688038 25
+RedState 3135241 26
+infowars 14505245 27
