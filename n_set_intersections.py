@@ -1,9 +1,54 @@
 import os
 from bsddb3 import db
-import shelve
+from json import dumps
+from json import loads
+import time
+from multiprocessing import Pool as ThreadPool
+from multiprocessing import Lock
+
+# import shelve
 
 a = [(1, "a"), (2, "a"), (2, "b"), (3, "a"), (3, "b"), (1, "c"), (5, "a")]
+file_dir = "/data-no-cnn"
 
+# lock = Lock()
+# count = [0]
+#
+#
+# def map_follower(element):
+#     # with lock:
+#     #     count[0] += 1
+#     #     if count[0] % 100000 == 0:
+#     #         print "working..." + str(count[0])
+#     # try:
+#     #     d[element[0]].append(element[1])
+#     # except KeyError:
+#     #     d[element[0]] = [element[1]]
+#     with lock:
+#         count[0] += 1
+#         if count[0] % 100000 == 0:
+#             print "working..." + str(count[0])
+#         mapDB = db.DB()
+#         mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
+#         k = element[0]
+#         v = element[1]
+#         try:
+#             t = loads(mapDB[k])
+#             t.append(v)
+#             mapDB[k] = dumps(t)
+#         except KeyError:
+#             mapDB[k] = dumps([v])
+#         mapDB.close()
+
+
+def timing(f):
+    def wrap(*args):
+        time1 = time.time()
+        ret = f(*args)
+        time2 = time.time()
+        print '%s function took %0.3f ms' % (f.func_name, (time2-time1)*1000.0)
+        return ret
+    return wrap
 
 # # Part 1: Create database and insert 4 elements
 # #
@@ -19,10 +64,14 @@ a = [(1, "a"), (2, "a"), (2, "b"), (3, "a"), (3, "b"), (1, "c"), (5, "a")]
 # print '\t', db.DB_VERSION_STRING
 #
 # # Insert new elements in database
-# mapDB.put("apple", ["red", "blue"])
-# mapDB.put("orange", "orange")
-# mapDB.put("banana", "yellow")
-# mapDB.put("tomato", "red")
+# mapDB["apple"] = "red"
+# mapDB["orange"] = "orange"
+# mapDB["avocado"] = "green"
+# mapDB["banana"] = "yellow"
+# try:
+#     print mapDB["mango"]
+# except KeyError:
+#     mapDB["mango"] = "blue"
 #
 # cursor = mapDB.cursor()
 # rec = cursor.first()
@@ -50,9 +99,11 @@ a = [(1, "a"), (2, "a"), (2, "b"), (3, "a"), (3, "b"), (1, "c"), (5, "a")]
 # fruitDB.close()
 
 
+@timing
 def n_set_intersection():
 
-    file_dir = "/data-no-cnn"
+    lock = Lock()
+    pool = ThreadPool(1)
 
     mapping = {}
     with open("seeds.txt", "r") as my_file:
@@ -65,8 +116,8 @@ def n_set_intersection():
 
     starting_list = []
     for filename in file_list:
-        user_id = mapping[filename.split('_')[0]]
-        # user_id = filename.split('_')[0]
+        # user_id = mapping[filename.split('_')[0]]
+        user_id = filename.split('_')[0]
 
         filename = "../data" + file_dir + "/" + filename
         with open(filename, "r") as infile:
@@ -76,17 +127,68 @@ def n_set_intersection():
     print "HERE 1"
     print len(starting_list)
 
+    # # Part 1: Create database and insert 4 elements
+    # #
+    # Get an instance of BerkeleyDB
+    # mapDB = db.DB()
+    # mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
+    #
+    # d = {}
+    # count = [0]
+
+    # ATTEMPTED MULTITHREAD USE
+    # def map_follower(element):
+    #     # with lock:
+    #     #     count[0] += 1
+    #     #     if count[0] % 100000 == 0:
+    #     #         print "working..." + str(count[0])
+    #     # try:
+    #     #     d[element[0]].append(element[1])
+    #     # except KeyError:
+    #     #     d[element[0]] = [element[1]]
+    #     with lock:
+    #         mapDB = db.DB()
+    #         mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
+    #         k = element[0]
+    #         v = element[1]
+    #         try:
+    #             t = loads(mapDB[k])
+    #             t.append(v)
+    #             mapDB[k] = dumps(t)
+    #         except KeyError:
+    #             mapDB[k] = dumps([v])
+    #         mapDB.close()
+    #
+    # pool.map(map_follower, starting_list)
+    # pool.close()
+    # pool.join()
+
+    # REGULAR BERKELEYDB USE
+    # for i in xrange(len(starting_list) - 1, -1, -1):
+    #     if i % 100000 == 0:
+    #         print "working..." + str(i)
+    #     element = starting_list[i]
+    #     key = element[0]
+    #     value = element[1]
+    #     try:
+    #         temp = loads(mapDB[key])
+    #         temp.append(value)
+    #         mapDB[key] = dumps(temp)
+    #     except KeyError:
+    #         mapDB[key] = dumps([value])
+    #     del starting_list[i]
+
     # group by element #
-    d = {}
-    for i in xrange(len(starting_list) - 1, -1, -1):
-        if i % 100000 == 0:
-            print "working..." + str(i)
-        element = starting_list[i]
-        try:
-            d[element[0]].append(element[1])
-        except KeyError:
-            d[element[0]] = [element[1]]
-        del starting_list[i]
+    # d = {}
+    # for i in xrange(len(starting_list) - 1, -1, -1):
+    #     if i % 100000 == 0:
+    #         print "working..." + str(i)
+    #     element = starting_list[i]
+    #     try:
+    #         d[element[0]].append(element[1])
+    #     except KeyError:
+    #         d[element[0]] = [element[1]]
+    #     del starting_list[i]
 
     print "HERE 2"
 
@@ -95,6 +197,31 @@ def n_set_intersection():
 
     print "HERE 3"
 
+    # BERKELEY DB COLLECTING
+    # mapDB = db.DB()
+    # mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
+    #
+    # cursor = mapDB.cursor()
+    # rec = cursor.first()
+    #
+    # dic = {}
+    # count = 0
+    # while rec:
+    #     value = loads(rec[1])
+    #     count += 1
+    #     if count % 100000 == 0:
+    #         print "collecting..." + str(count)
+    #     if len(value) != 1:
+    #         key = frozenset(value)
+    #         if len(key) != 1:
+    #             try:
+    #                 dic[key] += 1
+    #             except KeyError:
+    #                 dic[key] = 1
+    #     rec = cursor.next()
+    # return dic
+
+    # REGULAR COLLECTING
     # final mapping, collect and sum up terms #
     dic = {}
     count = 0
