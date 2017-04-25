@@ -1,15 +1,21 @@
 import os
-from bsddb3 import db
+import sys
+# from bsddb3 import db
 from json import dumps
 from json import loads
+import numpy as np
 import time
-from multiprocessing import Pool as ThreadPool
-from multiprocessing import Lock
+import tweepy
+# from multiprocessing import Pool as ThreadPool
+# from multiprocessing import Lock
 
+consumer_key = "vw8VMxmNL6JQ6IIafCQvHonvi"
+consumer_secret = "6tjtJxomUimSL5s4gFOADGPiX0FVfn7Yn5IgMfkLuIEoOxLyJl"
+app_only_auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 # import shelve
 
-a = [(1, "a"), (2, "a"), (2, "b"), (3, "a"), (3, "b"), (1, "c"), (5, "a")]
-file_dir = "/data-no-cnn"
+file_dir = "/data-small"
 
 # lock = Lock()
 # count = [0]
@@ -50,60 +56,9 @@ def timing(f):
         return ret
     return wrap
 
-# # Part 1: Create database and insert 4 elements
-# #
-# filename = 'fruit'
-#
-# # Get an instance of BerkeleyDB
-# mapDB = db.DB()
-# # Create a database in file "fruit" with a Hash access method
-# # 	There are also, B+tree and Recno access methods
-# mapDB.open(filename, None, db.DB_HASH, db.DB_CREATE)
-#
-# # Print version information
-# print '\t', db.DB_VERSION_STRING
-#
-# # Insert new elements in database
-# mapDB["apple"] = "red"
-# mapDB["orange"] = "orange"
-# mapDB["avocado"] = "green"
-# mapDB["banana"] = "yellow"
-# try:
-#     print mapDB["mango"]
-# except KeyError:
-#     mapDB["mango"] = "blue"
-#
-# cursor = mapDB.cursor()
-# rec = cursor.first()
-# while rec:
-#     print rec
-#     rec = cursor.next()
-#
-# # Close database
-# mapDB.close()
-
-# # Part 2: Open database and write its contents out
-# #
-# fruitDB = db.DB()
-# # Open database
-# #	Access method: Hash
-# #	set isolation level to "dirty read (read uncommited)"
-# fruitDB.open(filename, None, db.DB_HASH, db.DB_DIRTY_READ)
-#
-# # get database cursor and print out database content
-# cursor = fruitDB.cursor()
-# rec = cursor.first()
-# while rec:
-#         print rec
-#         rec = cursor.next()
-# fruitDB.close()
-
 
 @timing
 def n_set_intersection():
-
-    lock = Lock()
-    pool = ThreadPool(1)
 
     mapping = {}
     with open("seeds.txt", "r") as my_file:
@@ -114,68 +69,41 @@ def n_set_intersection():
     # first mapping: emit a huge list #
     file_list = os.listdir("../data" + file_dir)
 
-    starting_list = []
+    d = {}
+    count = 0
     for filename in file_list:
         # user_id = mapping[filename.split('_')[0]]
         user_id = filename.split('_')[0]
 
         filename = "../data" + file_dir + "/" + filename
+        if count % 100000 == 0:
+            print "working..." + str(count)
+            count += count
         with open(filename, "r") as infile:
             for line in infile:
-                starting_list.append((line.rstrip('\n'), user_id))
+                key = line.rstrip('\n')
+                value = user_id
+
+                try:
+                    d[key].append(value)
+                except KeyError:
+                    d[key] = [value]
+                # starting_list.append((key, user_id))
 
     print "HERE 1"
-    print len(starting_list)
+    # print len(starting_list)
 
-    # # Part 1: Create database and insert 4 elements
-    # #
-    # Get an instance of BerkeleyDB
-    # mapDB = db.DB()
-    # mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
-    #
-    # d = {}
-    # count = [0]
+    # mapped_array = np.zeros(max_element - min_element)
+    # print sys.sizeof(mapped_array)
 
-    # ATTEMPTED MULTITHREAD USE
-    # def map_follower(element):
-    #     # with lock:
-    #     #     count[0] += 1
-    #     #     if count[0] % 100000 == 0:
-    #     #         print "working..." + str(count[0])
-    #     # try:
-    #     #     d[element[0]].append(element[1])
-    #     # except KeyError:
-    #     #     d[element[0]] = [element[1]]
-    #     with lock:
-    #         mapDB = db.DB()
-    #         mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
-    #         k = element[0]
-    #         v = element[1]
-    #         try:
-    #             t = loads(mapDB[k])
-    #             t.append(v)
-    #             mapDB[k] = dumps(t)
-    #         except KeyError:
-    #             mapDB[k] = dumps([v])
-    #         mapDB.close()
-    #
-    # pool.map(map_follower, starting_list)
-    # pool.close()
-    # pool.join()
-
-    # REGULAR BERKELEYDB USE
     # for i in xrange(len(starting_list) - 1, -1, -1):
     #     if i % 100000 == 0:
-    #         print "working..." + str(i)
+    #             print "working..." + str(i)
     #     element = starting_list[i]
     #     key = element[0]
     #     value = element[1]
-    #     try:
-    #         temp = loads(mapDB[key])
-    #         temp.append(value)
-    #         mapDB[key] = dumps(temp)
-    #     except KeyError:
-    #         mapDB[key] = dumps([value])
+    #
+    #
     #     del starting_list[i]
 
     # group by element #
@@ -184,61 +112,121 @@ def n_set_intersection():
     #     if i % 100000 == 0:
     #         print "working..." + str(i)
     #     element = starting_list[i]
+    #     key = element[0]
+    #     value = element[1]
+    #
     #     try:
-    #         d[element[0]].append(element[1])
+    #         d[key].append(value)
     #     except KeyError:
-    #         d[element[0]] = [element[1]]
+    #         d[key] = [value]
     #     del starting_list[i]
-
-    print "HERE 2"
-
-    # delete reference to this HUGE list#
-    del starting_list
+    #
+    # # delete reference to this HUGE list#
+    # del starting_list
 
     print "HERE 3"
-
-    # BERKELEY DB COLLECTING
-    # mapDB = db.DB()
-    # mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
-    #
-    # cursor = mapDB.cursor()
-    # rec = cursor.first()
-    #
-    # dic = {}
-    # count = 0
-    # while rec:
-    #     value = loads(rec[1])
-    #     count += 1
-    #     if count % 100000 == 0:
-    #         print "collecting..." + str(count)
-    #     if len(value) != 1:
-    #         key = frozenset(value)
-    #         if len(key) != 1:
-    #             try:
-    #                 dic[key] += 1
-    #             except KeyError:
-    #                 dic[key] = 1
-    #     rec = cursor.next()
-    # return dic
 
     # REGULAR COLLECTING
     # final mapping, collect and sum up terms #
     dic = {}
     count = 0
     for key, value in d.iteritems():
-        count += 1
         if count % 100000 == 0:
             print "collecting..." + str(count)
+            count += 1
+
         if len(value) != 1:
-            key = frozenset(value)
-            if len(key) != 1:
+            k = frozenset(value)
+            if len(k) != 1:
                 try:
-                    dic[key] += 1
+                    dic[k] += 1
                 except KeyError:
-                    dic[key] = 1
+                    dic[k] = 1
+    # return dic
+
+    # nodes = set()
+    # with open("../data/output" + file_dir + "_edges.csv", "w+") as infile:
+    #     infile.write("Source,Target,Type,Weight\n")
+    #
+    #     for k in sorted(dic, key=len):
+    #         if len(k) == 2:
+    #             line = ""
+    #             for i in list(k):
+    #                 line += str(i) + ","
+    #                 nodes.add(i)
+    #             line += "undirected" + "," + str(dic[k]) + "\n"
+    #             infile.write(line)
+    #
+    # with open("../data/output" + file_dir + "_nodes.csv", "w+") as outfile:
+    #     outfile.write("ID,Size\n")
+    #
+    #     for node in nodes:
+    #         userid = mapping[node]
+    #         user = api.get_user(user_id=userid)
+    #         outfile.write(node + "," + str(user.followers_count) + "\n")
+
     return dic
+    # print lines
 
 
-returned = n_set_intersection()
-print returned
+def dump_json(dic):
+
+    mapping = {}
+    jsonwrapper = {}
+    nodes = []
+    links = []
+
+    with open("seedsFull.txt") as infile:
+        for line in infile:
+            temp = line.split(" ")
+
+
+    # map_count = 0
+    # for account_name in seeds:
+    #     mapping[account_name] = map_count
+    #     nodes.append({"name": account_name, "group": 2})
+    #     map_count += 1
+
+    # print mapping
+    # print nodes
+
+
+    # for user_id in seeds:
+    #
+    #     followers = tweepy.Cursor(api.followers_ids, user_id=user_id, count=5000).items()
+    #     target = mapping[user_id]
+    #
+    #     count = 0
+    #     while True:
+    #         try:
+    #             user = next(followers)
+    #         except tweepy.TweepError as t:
+    #             print t.message
+    #         except StopIteration:
+    #             print str(count) + " followers of " + str(account_name)
+    #             break
+    #         count += 1
+    #         # print user
+    #         if str(user) in mapping:
+    #             doublecount += 1
+    #             double_file.write(str(user) + "\n")
+    #             # print "found user: " + str(user) + " mapping: " + str(mapping[str(user)])
+    #             links.append({"source": mapping[str(user)], "target": target, "value": 1})
+    #         else:
+    #             nodes.append({"name": str(user), "group": 1})
+    #             links.append({"source": map_count, "target": target, "value": 1})
+    #             mapping[str(user)] = map_count
+    #             map_count += 1
+    # jsonwrapper["nodes"] = nodes
+    # jsonwrapper["links"] = links
+    # print "final doublecount: " + str(doublecount)
+    # double_file.close()
+    # with open('../data/dataRedState.txt', 'w') as outfile:
+    #     dumps(jsonwrapper, outfile)
+
+
+r = n_set_intersection()
+print r
+dump_json(r)
+# print dumps(returned)
 

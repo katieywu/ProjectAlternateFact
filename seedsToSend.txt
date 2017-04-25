@@ -1,12 +1,23 @@
 TheBlaze 10774652
+FoxNews
 AddictingInfo 188014427
 OccupyDemocrats 878284831
+TheHuffingtonPost
 MSNBC 2836421
+TheAtlantic
+Vox
 NPR 5392522
 TheWashingtonPost 2467791
 NBCNews 14173315
+AP
+Reuters
+TheNewYorkTimes 807095
 USAToday 15754281
+CNN 759251
+TheWallStreetJournal
+TheFiscalTimes
 TheHill 1917731
+TheDailyCaller
 BreitbartNews 457984599
 DailyKos 20818801
 CounterPunch 297688038
