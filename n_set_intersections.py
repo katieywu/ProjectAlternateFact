@@ -1,50 +1,16 @@
 import os
 import sys
-# from bsddb3 import db
-from json import dumps
-from json import loads
-import numpy as np
+from sys import argv
+import json
 import time
-import tweepy
-# from multiprocessing import Pool as ThreadPool
-# from multiprocessing import Lock
+# import tweepy
 
-consumer_key = "vw8VMxmNL6JQ6IIafCQvHonvi"
-consumer_secret = "6tjtJxomUimSL5s4gFOADGPiX0FVfn7Yn5IgMfkLuIEoOxLyJl"
-app_only_auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
-api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
-# import shelve
+# consumer_key = "vw8VMxmNL6JQ6IIafCQvHonvi"
+# consumer_secret = "6tjtJxomUimSL5s4gFOADGPiX0FVfn7Yn5IgMfkLuIEoOxLyJl"
+# app_only_auth = tweepy.AppAuthHandler(consumer_key, consumer_secret)
+# api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
-file_dir = "/data-small"
-
-# lock = Lock()
-# count = [0]
-#
-#
-# def map_follower(element):
-#     # with lock:
-#     #     count[0] += 1
-#     #     if count[0] % 100000 == 0:
-#     #         print "working..." + str(count[0])
-#     # try:
-#     #     d[element[0]].append(element[1])
-#     # except KeyError:
-#     #     d[element[0]] = [element[1]]
-#     with lock:
-#         count[0] += 1
-#         if count[0] % 100000 == 0:
-#             print "working..." + str(count[0])
-#         mapDB = db.DB()
-#         mapDB.open("../data/database" + file_dir + "_output.db", None, db.DB_HASH, db.DB_CREATE)
-#         k = element[0]
-#         v = element[1]
-#         try:
-#             t = loads(mapDB[k])
-#             t.append(v)
-#             mapDB[k] = dumps(t)
-#         except KeyError:
-#             mapDB[k] = dumps([v])
-#         mapDB.close()
+file_dir = "/" + argv[1]
 
 
 def timing(f):
@@ -61,7 +27,7 @@ def timing(f):
 def n_set_intersection():
 
     mapping = {}
-    with open("seeds.txt", "r") as my_file:
+    with open("seedsFull.txt", "r") as my_file:
         for line in my_file:
             temp = line.split(' ')
             mapping[temp[0]] = temp[1]
@@ -72,15 +38,16 @@ def n_set_intersection():
     d = {}
     count = 0
     for filename in file_list:
-        # user_id = mapping[filename.split('_')[0]]
-        user_id = filename.split('_')[0]
+        user_id = mapping[filename.split('_')[0]]
+        # user_id = filename.split('_')[0]
 
         filename = "../data" + file_dir + "/" + filename
-        if count % 100000 == 0:
-            print "working..." + str(count)
-            count += count
+
         with open(filename, "r") as infile:
             for line in infile:
+                count += 1
+                if count % 100000 == 0:
+                    print "working..." + str(count)
                 key = line.rstrip('\n')
                 value = user_id
 
@@ -88,23 +55,9 @@ def n_set_intersection():
                     d[key].append(value)
                 except KeyError:
                     d[key] = [value]
-                # starting_list.append((key, user_id))
 
     print "HERE 1"
     # print len(starting_list)
-
-    # mapped_array = np.zeros(max_element - min_element)
-    # print sys.sizeof(mapped_array)
-
-    # for i in xrange(len(starting_list) - 1, -1, -1):
-    #     if i % 100000 == 0:
-    #             print "working..." + str(i)
-    #     element = starting_list[i]
-    #     key = element[0]
-    #     value = element[1]
-    #
-    #
-    #     del starting_list[i]
 
     # group by element #
     # d = {}
@@ -131,9 +84,9 @@ def n_set_intersection():
     dic = {}
     count = 0
     for key, value in d.iteritems():
+        count += 1
         if count % 100000 == 0:
             print "collecting..." + str(count)
-            count += 1
 
         if len(value) != 1:
             k = frozenset(value)
@@ -171,58 +124,39 @@ def n_set_intersection():
 
 def dump_json(dic):
 
+    lookup = {}
+    lookup_size = {}
+
     mapping = {}
     jsonwrapper = {}
     nodes = []
     links = []
 
+    # this contains user_id -> text
     with open("seedsFull.txt") as infile:
         for line in infile:
             temp = line.split(" ")
+            lookup[temp[1]] = temp[0]
+            lookup_size[temp[1]] = int(temp[2])
 
+    map_count = 0
 
-    # map_count = 0
-    # for account_name in seeds:
-    #     mapping[account_name] = map_count
-    #     nodes.append({"name": account_name, "group": 2})
-    #     map_count += 1
+    for key, value in dic.iteritems():
+        curr_id = map_count
+        nodes.append({"name": " ", "group": 2, "size": value})
+        map_count += 1
 
-    # print mapping
-    # print nodes
-
-
-    # for user_id in seeds:
-    #
-    #     followers = tweepy.Cursor(api.followers_ids, user_id=user_id, count=5000).items()
-    #     target = mapping[user_id]
-    #
-    #     count = 0
-    #     while True:
-    #         try:
-    #             user = next(followers)
-    #         except tweepy.TweepError as t:
-    #             print t.message
-    #         except StopIteration:
-    #             print str(count) + " followers of " + str(account_name)
-    #             break
-    #         count += 1
-    #         # print user
-    #         if str(user) in mapping:
-    #             doublecount += 1
-    #             double_file.write(str(user) + "\n")
-    #             # print "found user: " + str(user) + " mapping: " + str(mapping[str(user)])
-    #             links.append({"source": mapping[str(user)], "target": target, "value": 1})
-    #         else:
-    #             nodes.append({"name": str(user), "group": 1})
-    #             links.append({"source": map_count, "target": target, "value": 1})
-    #             mapping[str(user)] = map_count
-    #             map_count += 1
-    # jsonwrapper["nodes"] = nodes
-    # jsonwrapper["links"] = links
-    # print "final doublecount: " + str(doublecount)
-    # double_file.close()
-    # with open('../data/dataRedState.txt', 'w') as outfile:
-    #     dumps(jsonwrapper, outfile)
+        for set_id in list(key):
+            if str(set_id) not in mapping:
+                mapping[set_id] = map_count
+                map_count += 1
+                nodes.append({"name": lookup[set_id], "group": 1, "size": lookup_size[set_id]})
+            links.append({"source": curr_id, "target": mapping[set_id], "value": value})
+    jsonwrapper["nodes"] = nodes
+    jsonwrapper["links"] = links
+    print jsonwrapper
+    with open("../data" + file_dir + ".json", "w+") as outfile:
+        json.dump(jsonwrapper, outfile)
 
 
 r = n_set_intersection()
