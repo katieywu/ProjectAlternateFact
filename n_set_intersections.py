@@ -11,6 +11,7 @@ import time
 # api = tweepy.API(app_only_auth, wait_on_rate_limit=True, wait_on_rate_limit_notify=True)
 
 file_dir = "/" + argv[1]
+threshold = int(argv[2])
 
 
 def timing(f):
@@ -46,7 +47,7 @@ def n_set_intersection():
         with open(filename, "r") as infile:
             for line in infile:
                 count += 1
-                if count % 100000 == 0:
+                if count % 1000000 == 0:
                     print "working..." + str(count)
                 key = line.rstrip('\n')
                 value = user_id
@@ -82,11 +83,11 @@ def n_set_intersection():
     # REGULAR COLLECTING
     # final mapping, collect and sum up terms #
     dic = {}
-    count = 0
+    counter = 0
     for key, value in d.iteritems():
-        count += 1
-        if count % 100000 == 0:
-            print "collecting..." + str(count)
+        counter += 1
+        if counter % 1000000 == 0:
+            print "collecting..." + str(counter)
 
         if len(value) != 1:
             k = frozenset(value)
@@ -132,26 +133,30 @@ def dump_json(dic):
     nodes = []
     links = []
 
+    map_count = 0
+
     # this contains user_id -> text
     with open("seedsFull.txt") as infile:
         for line in infile:
             temp = line.split(" ")
-            lookup[temp[1]] = temp[0]
-            lookup_size[temp[1]] = int(temp[2])
-
-    map_count = 0
+            # lookup[temp[1]] = temp[0]
+            # lookup_size[temp[1]] = int(temp[2])
+            mapping[temp[1]] = map_count
+            map_count += 1
+            nodes.append({"name": temp[1], "group": 1, "size": temp[2]})
 
     for key, value in dic.iteritems():
-        curr_id = map_count
-        nodes.append({"name": " ", "group": 2, "size": value})
-        map_count += 1
+        if value > threshold:
+            curr_id = map_count
+            nodes.append({"name": " ", "group": 2, "size": value})
+            map_count += 1
 
-        for set_id in list(key):
-            if str(set_id) not in mapping:
-                mapping[set_id] = map_count
-                map_count += 1
-                nodes.append({"name": lookup[set_id], "group": 1, "size": lookup_size[set_id]})
-            links.append({"source": curr_id, "target": mapping[set_id], "value": value})
+            for set_id in list(key):
+                # if str(set_id) not in mapping:
+                #     mapping[set_id] = map_count
+                #     map_count += 1
+                #     nodes.append({"name": lookup[set_id], "group": 1, "size": lookup_size[set_id]})
+                links.append({"source": curr_id, "target": mapping[set_id], "value": value})
     jsonwrapper["nodes"] = nodes
     jsonwrapper["links"] = links
     # print jsonwrapper
@@ -162,5 +167,4 @@ def dump_json(dic):
 r = n_set_intersection()
 # print r
 dump_json(r)
-# print dumps(returned)
 

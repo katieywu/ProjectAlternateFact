@@ -23,6 +23,3 @@ DailyKos 20818801 256490
 CounterPunch 297688038 49657
 RedState 3135241 193266
 Infowars 14505245 275628
-dataset0 0 10000
-dataset1 1 200
-dataset2 2 400

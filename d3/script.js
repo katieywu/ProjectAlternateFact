@@ -28,9 +28,12 @@ var force = d3.layout.force()
 //    .charge(-1000)
     .charge(-10 / k)
     .gravity(100 * k)
-    .linkDistance(80)
+    .linkDistance(height/2)
     .size([width, height]);
     
+force.linkStrength(function(link) {
+    return (1 - (link.value - 1000)/(1300000 - 1000));
+});
 //Creates the graph data structure out of the json data
 force.nodes(graph.nodes)
     .links(graph.links)
