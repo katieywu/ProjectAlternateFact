@@ -154,13 +154,13 @@ def dump_json(dic):
             links.append({"source": curr_id, "target": mapping[set_id], "value": value})
     jsonwrapper["nodes"] = nodes
     jsonwrapper["links"] = links
-    print jsonwrapper
+    # print jsonwrapper
     with open("../data" + file_dir + ".json", "w+") as outfile:
         json.dump(jsonwrapper, outfile)
 
 
 r = n_set_intersection()
-print r
+# print r
 dump_json(r)
 # print dumps(returned)
 

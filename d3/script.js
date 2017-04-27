@@ -1,4 +1,3 @@
-
 //Constants for the SVG
 var width = window.innerWidth,
     height = window.innerHeight;
@@ -17,7 +16,7 @@ var svg = d3.select("body").append("svg")
     .call(zoom)
     .append('svg:g');
 
-
+d3.select("svg").on("dblclick.zoom", null);
 //Read the data from the data element 
 //var data = document.getElementById('data').innerHTML;
 //console.log(data)
@@ -37,7 +36,35 @@ force.nodes(graph.nodes)
     .links(graph.links)
     .start();
 
-force.drag().on("dragstart", function() { d3.event.sourceEvent.stopPropagation(); });
+//---Insert-------
+var node_drag = d3.behavior.drag()
+        .on("dragstart", dragstart)
+        .on("drag", dragmove)
+        .on("dragend", dragend);
+
+    function dragstart(d, i) {
+        force.stop() // stops the force auto positioning before you start dragging
+    }
+
+    function dragmove(d, i) {
+        d.px += d3.event.dx;
+        d.py += d3.event.dy;
+        d.x += d3.event.dx;
+        d.y += d3.event.dy; 
+    }
+
+    function dragend(d, i) {
+        d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+        force.resume();
+    }
+
+    function releasenode(d) {
+        d.fixed = false; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+        //force.resume();
+    }
+
+node_drag.on("dragstart", function() { d3.event.sourceEvent.stopPropagation(); });
+//---End Insert------
 
 //Create all the line svgs but without locations yet
 var link = svg.selectAll(".link")
@@ -54,15 +81,12 @@ var node = svg.selectAll(".node")
     .data(graph.nodes)
     .enter().append("g")
     .attr("class", "node")
-    .call(force.drag);
+    .on('dblclick', releasenode)
+    .call(node_drag); //Added;
 
 node.append("circle")
     .attr("r", function(d) {
-        if (d.size * 0.00001 < 1){
-            return 3;
-        } else {
-            return d.size * 0.00001
-        }
+        return Math.sqrt(d.size) * 0.05 + 1;
     })
     .style("fill", function (d) {
     return color(d.group);
@@ -106,18 +130,14 @@ force.on("tick", function () {
         return d.y;
     });
     
-    //End Changed
-//      var q = d3.geom.quadtree(graph.nodes),
-//  i = 0,
-//  n = graph.nodes.length;
-//    while (++i < n) q.visit(collide(graph.nodes[i]), 0.5);
     node.each(collide(0.5)); //Added
 
 });
 
 
 function zoomed() {
-  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    var scale = d3.event.scale - 0.5;
+  svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + scale + ")");
 }
 
 function dragstarted(d) {
@@ -143,13 +163,8 @@ var padding = 16;
 function collide(alpha) {
   var quadtree = d3.geom.quadtree(graph.nodes);
   return function(d) {
-    var radius;
-    if (d.size * 0.00001 < 1){
-        radius = 3;
-    } else {
-        radius = d.size * 0.00001
-    }
-//      radius = 5;
+    var radius = Math.sqrt(d.size) * 0.05 + 1;
+      
     var rb = radius*2 + padding,
         nx1 = d.x - rb,
         nx2 = d.x + rb,
@@ -172,32 +187,3 @@ function collide(alpha) {
     });
   };
 }
-//function collide(node, alpha) {
-////    console.log(node.radius);
-//    var radius;
-//    if (node.size * 0.00001 < 1){
-//        radius = 3;
-//    } else {
-//        radius = node.size * 0.00001
-//    }
-//  var rb = radius + 16,
-//      nx1 = node.x - rb,
-//      nx2 = node.x + rb,
-//      ny1 = node.y - rb,
-//      ny2 = node.y + rb;
-//  return function(quad, x1, y1, x2, y2) {
-//    if (quad.point && (quad.point !== node)) {
-//        var x = node.x - quad.point.x,
-//            y = node.y - quad.point.y,
-//            l = Math.sqrt(x * x + y * y);
-//          if (l < rb) {
-//          l = (l - rb) / l * alpha;
-//          node.x -= x *= l;
-//          node.y -= y *= l;
-//          quad.point.x += x;
-//          quad.point.y += y;
-//      }
-//    }
-//    return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
-//  };
-//}
