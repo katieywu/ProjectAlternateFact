@@ -10,21 +10,40 @@
 }
 
 .node {
-    opacity: 0.8;
+    fill-opacity: 0.8;
 }
     
 .node text {
     pointer-events: none;
     font: 32px sans-serif;
 }
+    
+h3 {
+    color: #404040;
+    text-align:center;  
+    font-size: 32px;
+    font-family: "Helvetica";
+}
 
+#thresholdSlider {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    left: 0;
+    right: 0;
+    width: 50%;
+}
 </style>
 <script src="https://d3js.org/d3.v3.min.js"></script>
-    
+<!--<script src="d3.min.js"></script>-->
+
 <script src="../../data/data-full.json"></script>
 </head>
 
 <body>
+<form id="thresholdSlider">
+    <h3> Link threshold 1000 <input type="range"  name="points" style="width:50%" value = 0 min="1000" max="1500000" onchange="threshold(this.value)"> 15000000 </h3>
+</form>
 <script src="script.js"></script>
 
 </body>

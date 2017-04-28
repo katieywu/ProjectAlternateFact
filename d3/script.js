@@ -21,6 +21,7 @@ d3.select("svg").on("dblclick.zoom", null);
 //var data = document.getElementById('data').innerHTML;
 //console.log(data)
 graph = data;
+graphRec=JSON.parse(JSON.stringify(graph)); 
 
 var k = Math.sqrt(graph.nodes.length / (width * height));
 //Set up the force layout
@@ -75,7 +76,7 @@ var link = svg.selectAll(".link")
     .enter().append("line")
     .attr("class", "link")
     .style("stroke-width", function (d) {
-    return Math.sqrt(d.value)*0.01;
+    return Math.sqrt(d.value)*0.05;
 });
 
 //Do the same with the circles for the nodes - no 
@@ -85,7 +86,9 @@ var node = svg.selectAll(".node")
     .enter().append("g")
     .attr("class", "node")
     .on('dblclick', releasenode)
-    .call(node_drag); //Added;
+    .call(node_drag) //Added;
+    .on('mouseover', connectedNodes)
+    .on('mouseout', unconnectedNodes); //Added code 
 
 node.append("circle")
     .attr("r", function(d) {
@@ -189,4 +192,72 @@ function collide(alpha) {
       return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
     });
   };
+}
+var linkedByIndex = {};
+
+function updateLinkedByIndex() {
+    linkedByIndex = {};
+    for (i = 0; i < graph.nodes.length; i++) {
+    linkedByIndex[i + "," + i] = 1;
+    };
+    graph.links.forEach(function (d) {
+        linkedByIndex[d.source.index + "," + d.target.index] = 1;
+    });
+}
+
+//adjust threshold
+function threshold(thresh) {
+    graph.links.splice(0, graph.links.length);
+		for (var i = 0; i < graphRec.links.length; i++) {
+			if (graphRec.links[i].value > thresh) {graph.links.push(graphRec.links[i]);}
+		}
+    restart();
+    updateLinkedByIndex();
+
+}
+//Restart the visualisation after any node and link changes
+function restart() {
+	link = link.data(graph.links);
+	link.exit().remove();
+	link.enter().insert("line", ".node").attr("class", "link");
+	node = node.data(graph.nodes);
+	node.enter().insert("circle", ".cursor").attr("class", "node").attr("r", 5).call(force.drag);
+	force.start();
+}
+
+//Toggle stores whether the highlighting is on
+//Create an array logging what is connected to what
+
+updateLinkedByIndex();
+//This function looks up whether a pair are neighbors
+function neighboring(a, b) {
+    return linkedByIndex[a.index + "," + b.index];
+}
+
+function connectedNodes() {
+    updateLinkedByIndex();
+
+        //Reduce the opacity of all but the neighboring nodes
+    d = d3.select(this).node().__data__;
+    node.style("fill-opacity", function (o) {
+        return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+    });
+    link.style("stroke-opacity", function (o) {
+        return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+    });
+}
+
+function subgraphNodes() {
+    node.style("fill-opacity", function(d) {
+        if (d.weight > 0) {
+            return 0.8;
+        } else {
+            return 0.2;
+        }
+    });
+}
+
+function unconnectedNodes() {
+    node.style("fill-opacity", 0.8);
+    link.style("stroke-opacity", 0.6);
 }

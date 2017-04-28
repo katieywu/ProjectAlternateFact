@@ -143,12 +143,12 @@ def dump_json(dic):
             # lookup_size[temp[1]] = int(temp[2])
             mapping[temp[1]] = map_count
             map_count += 1
-            nodes.append({"name": temp[1], "group": 1, "size": temp[2]})
+            nodes.append({"name": temp[0], "group": temp[3], "size": temp[2]})
 
     for key, value in dic.iteritems():
         if value > threshold:
             curr_id = map_count
-            nodes.append({"name": " ", "group": 2, "size": value})
+            nodes.append({"name": " ", "group": 7, "size": value})
             map_count += 1
 
             for set_id in list(key):
