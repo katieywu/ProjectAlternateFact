@@ -27,7 +27,7 @@ var k = Math.sqrt(graph.nodes.length / (width * height));
 //Set up the force layout
 var force = d3.layout.force()
 //    .charge(-1000)
-    .charge(-10 / k)
+    .charge(-30 / k)
     .gravity(100 * k)
     .linkDistance(height/2)
     .size([width, height]);
@@ -76,7 +76,7 @@ var link = svg.selectAll(".link")
     .enter().append("line")
     .attr("class", "link")
     .style("stroke-width", function (d) {
-    return Math.sqrt(d.value)*0.05;
+    return Math.sqrt(d.value)*0.1;
 });
 
 //Do the same with the circles for the nodes - no 
@@ -194,6 +194,7 @@ function collide(alpha) {
   };
 }
 var linkedByIndex = {};
+//var thresholdEdges = 1000;
 
 function updateLinkedByIndex() {
     linkedByIndex = {};
@@ -207,12 +208,16 @@ function updateLinkedByIndex() {
 
 //adjust threshold
 function threshold(thresh) {
+//    thresholdEdges = thresh;
+    var d = document.getElementById("thresholdText");
+    d.firstChild.data = "Link threshold " + thresh;
     graph.links.splice(0, graph.links.length);
 		for (var i = 0; i < graphRec.links.length; i++) {
 			if (graphRec.links[i].value > thresh) {graph.links.push(graphRec.links[i]);}
 		}
     restart();
     updateLinkedByIndex();
+    subgraphNodes();
 
 }
 //Restart the visualisation after any node and link changes
@@ -240,10 +245,10 @@ function connectedNodes() {
         //Reduce the opacity of all but the neighboring nodes
     d = d3.select(this).node().__data__;
     node.style("fill-opacity", function (o) {
-        return neighboring(d, o) | neighboring(o, d) ? 1 : 0.1;
+        return neighboring(d, o) | neighboring(o, d) ? 1 : 0.2;
     });
     link.style("stroke-opacity", function (o) {
-        return d.index==o.source.index | d.index==o.target.index ? 1 : 0.1;
+        return d.index==o.source.index | d.index==o.target.index ? 0.8 : 0.2;
     });
 }
 
@@ -258,6 +263,7 @@ function subgraphNodes() {
 }
 
 function unconnectedNodes() {
-    node.style("fill-opacity", 0.8);
-    link.style("stroke-opacity", 0.6);
+//    node.style("fill-opacity", 0.8);
+//    link.style("stroke-opacity", 0.6);
+    subgraphNodes();
 }
